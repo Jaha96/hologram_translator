@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Speech recognition</title>
+</head>
+
+<style>
+:root {
+    --margin-val: 700px
+}
+body {
+    background-color: black;
+    color: white;
+    text-shadow: 2px 2px 4px white;
+}
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.up {
+    padding-bottom: var(--margin-val);
+}
+.down {
+    padding-top: var(--margin-val);
+}
+.left {
+    padding-right: var(--margin-val);
+    width: 100%;
+}
+.right {
+    padding-left: var(--margin-val);
+    width: 100%;
+}
+.rotate-0 {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+.rotate-90 {
+  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+.rotate-270 {
+  transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+.rotate-180 {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+</style>
+<body>
+    <div class="centered up">
+        <h1 class="rotate-0">{{ text }}</h1>
+    </div>
+    <div class="centered down">
+        <h1 class="rotate-180">{{ text }}</h1>
+    </div>
+    <div class="centered left">
+        <h1 class="rotate-270">{{ text }}</h1>
+    </div>
+    <div class="centered right">
+        <h1 class="rotate-90">{{ text }}</h1>
+    </div>
+
+    <script></script>
+    <script>
+        const speech = new webkitSpeechRecognition();
+        // speech.lang = 'ja-JP';
+        speech.lang = 'en-US';
+
+        const btn = document.getElementById('btn');
+        const content = document.getElementById('content');
+
+        document.addEventListener('click', function () {
+            speech.start();
+        });
+
+        speech.onresult = function (e) {
+            speech.stop();
+            if (e.results[0].isFinal) {
+              var autotext = e.results[0][0].transcript
+              console.log(e);
+              console.log(autotext);
+              window.location.href="/translate/" + autotext; 
+            }
+        }
+
+        // speech.onend = () => {
+        //    speech.start()
+        // };
+    </script>
+
+</body>
