@@ -1,0 +1,16 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Translate",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/translate.py",
+            "console": "integratedTerminal",
+            "args": ["-model", "data/model/en-ja-model_step_100000.pt", "-txt", "What time is it now", "--n_best", "5", "-replace_unk", "-verbose"]
+        }
+    ]
+}
