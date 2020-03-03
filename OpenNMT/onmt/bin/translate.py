@@ -67,7 +67,7 @@ def main(text = "Translator"):
 
     dir_path = os.getcwd()
     sys.argv.append("-model")
-    sys.argv.append(os.path.join(dir_path, "OpenNMT", "data", "model", "en-ja-model_step_100000.pt"))
+    sys.argv.append(os.path.join(dir_path, "OpenNMT", "data", "model", "normalized-data-model.pt"))
     sys.argv.append("--src")
     sys.argv.append(text.lower())
     sys.argv.append("--n_best")

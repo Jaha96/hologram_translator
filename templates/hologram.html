@@ -41,42 +41,67 @@ body {
   transform: scaleX(-1);
 }
 .rotate-90 {
-  transform: rotate(90deg);
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
+  transform: rotate3d(-1, 1, 0, 180deg);
 }
 .rotate-270 {
-  transform: rotate(-90deg);
-  -webkit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
+  transform: rotate3d(1, 1, 0, 180deg);
 }
 .rotate-180 {
-    transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    transform: rotate3d(1, 0, 0, 180deg);
+}
+
+@keyframes typing { from { width: 0;}}
+@keyframes caret {
+    50% { border-color: transparent; }
+}
+
+h1 {
+    font-family: monospace;
+    font-size: 4em;
+    white-space: nowrap;
+}
+
+.type-class {
+    width: 100%;
+    border-right: 0.08em solid;
+    overflow: hidden;
+    animation: typing 5s steps(24, end), caret .5s step-end infinite;
+}
+.ear {
+    filter: invert(100%) sepia(0%) saturate(7455%) hue-rotate(185deg) brightness(107%) contrast(99%);
+}
+.ear-up {
+    margin-top: 100px;
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
+}
+
+.ear-down {
+    margin-bottom: 100px;
+    transform: rotate3d(1, 0, 0, 180deg);
+}
+
+.ear-left {
+    margin-left: 100px;
+    transform: rotate3d(1, 1, 0, 180deg);
+}
+
+.ear-right {
+    margin-right: 100px;
+    transform: rotate3d(-1, 1, 0, 180deg);
+}
+
+img{
+    width: 250px;
 }
 </style>
 <body>
     <div class="centered up">
-        <h1 class="rotate-0">{{ text }}</h1>
+        <!-- <img class='ear-up' src='/static/loading.gif'/> -->
+        <h1 class="rotate-0 type-class">{{ text }}</h1>
     </div>
     <div class="centered down">
-        <h1 class="rotate-180">{{ text }}</h1>
+        <h1 class="rotate-180 type-class">{{ text }}</h1>
     </div>
     <div class="centered left">
         <h1 class="rotate-270">{{ text }}</h1>
@@ -87,26 +112,55 @@ body {
 
     <script></script>
     <script>
+        // self executing function here
+        (function() {
+        // your page initialization code here
+        // the DOM will be available here
+            var u = new SpeechSynthesisUtterance();
+            u.text = '{{ text }}';
+            u.lang = 'ja-JP';
+            u.rate = 1.2;
+            speechSynthesis.speak(u);
+        })();
+        
+
+        
         const speech = new webkitSpeechRecognition();
         // speech.lang = 'ja-JP';
         speech.lang = 'en-US';
+        result = NaN
 
         const btn = document.getElementById('btn');
         const content = document.getElementById('content');
 
         document.addEventListener('click', function () {
             speech.start();
+            document.getElementsByClassName('up')[0].innerHTML = "<img class='ear ear-up' src='/static/listening.png'/>"
+            document.getElementsByClassName('down')[0].innerHTML = "<img class='ear ear-down' src='/static/listening.png'/>"
+            document.getElementsByClassName('left')[0].innerHTML = "<img class='ear ear-left' src='/static/listening.png'/>"
+            document.getElementsByClassName('right')[0].innerHTML = "<img class='ear ear-right' src='/static/listening.png'/>"
         });
 
         speech.onresult = function (e) {
             speech.stop();
+            document.getElementsByClassName('up')[0].innerHTML = "<img class='ear-up' src='/static/loading.gif'/>"
+            document.getElementsByClassName('down')[0].innerHTML = "<img class='ear-down' src='/static/loading.gif'/>"
+            document.getElementsByClassName('left')[0].innerHTML = "<img class='ear-left' src='/static/loading.gif'/>"
+            document.getElementsByClassName('right')[0].innerHTML = "<img class='ear-right' src='/static/loading.gif'/>"
             if (e.results[0].isFinal) {
               var autotext = e.results[0][0].transcript
               console.log(e);
               console.log(autotext);
               window.location.href="/translate/" + autotext; 
+            }else{
+                
             }
         }
+
+        speech.onaudioend = function (params) {
+            // alert('audio end')
+        }
+
 
         // speech.onend = () => {
         //    speech.start()
